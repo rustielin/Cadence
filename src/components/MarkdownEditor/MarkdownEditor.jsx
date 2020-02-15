@@ -1,14 +1,30 @@
 import React from "react";
+import SimpleMDE from "react-simplemde-editor";
 import "./MarkdownEditor.css";
+import "easymde/dist/easymde.min.css";
 
 class MarkdownEditor extends React.Component {
 
-	state = {};
+    state = { mdeValue: "" };
+    
+    handleChange = value => {
+        this.setState({ mdeValue: value });
+    };
 
 	render = () => {
 		return (
             <div className="editorContainer">
-                HELLO
+                <SimpleMDE
+                    id="your-custom-id"
+                    onChange={this.handleChange}
+                    value={this.state.mdeValue}
+                    options={{
+                        toolbar: false,
+                        spellChecker: false,
+                        indentWithTabs: true,
+                        forceSync: true
+                    }}
+                />
             </div>
 		);
 	};
