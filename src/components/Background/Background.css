@@ -3,6 +3,7 @@
 /* ------------ */
 
 .background {
+	z-index: 1;
 	width: 50%;
 	height: 100%;
 	background-size: cover;
@@ -15,7 +16,6 @@
 
 .fullscreenBg {
 	width: 100%;
-	z-index: 1;
 }
 
 .imgCredit {
