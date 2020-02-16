@@ -21,4 +21,4 @@ module.exports = {
 }
 ```
 
-Start by using `yarn`. You can set up dev mode by using `yarn start`. Production builds are made using `yarn prod`. You can then load the extension into Chrome by loading unpacked extension in the `build` directory.
+Start by using `yarn`. You can set up dev mode by using `yarn start`. Production builds are made using `yarn build`. You can then load the extension into Chrome by loading unpacked extension in the `build` directory.
