@@ -30,3 +30,7 @@
 	word-wrap: normal;
 	margin: auto;
 }
+
+#editor-wrapper > div.CodeMirror.cm-s-easymde.CodeMirror-wrap {
+	height: 100%;
+}

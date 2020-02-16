@@ -27,14 +27,18 @@ const disabledShortcuts = {
     toggleFullScreen: ""
 }
 
+// some ugly placeholder text
+const placeholderContent = "# Hi stranger \nWelcome to Cadence! Cadence supports Markdown, meaning you can take notes and change pages quickly - at a productive cadence. \n\n## Todo list \n\n* install Chrome \n* install Cadence \n* take notes \n\n ## Steps to world domination\n\n1. Make up a plan \n2. Follow the plan\n\n> NOTE: Make sure to angery react all pictures of corn"
+
 class MarkdownEditor extends React.Component {
 
     constructor() {
         super();
         const content = localStorage.getItem("content");
         this.state = {
-            mdeValue: content? content : ""
+            mdeValue: content || placeholderContent,
         }
+        this.mdeRef = React.createRef();
     }
     
     handleChange = value => {
@@ -43,14 +47,20 @@ class MarkdownEditor extends React.Component {
 		localStorage.setItem("content", content);
     };
 
+    corn = () => {
+        console.log("ANGERY")
+    }
+
 	render = () => {
 		return (
             <div className="editorContainer">
+                {/* <button onClick={this.corn}>I HATE CORN</button> */}
                 <SimpleMDE
                     className="editor"
                     id="editor"
                     onChange={this.handleChange}
                     value={this.state.mdeValue}
+                    ref={this.mdeRef}
                     options={{
                         toolbar: false,
                         spellChecker: false,
