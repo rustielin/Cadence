@@ -26,6 +26,12 @@
 	outline: none;
 }
 
-#editor-wrapper > div.CodeMirror.cm-s-easymde.CodeMirror-wrap {
-	height: 100%;
+/* Overrides  */
+
+.CodeMirror {
+	height: 100% !important;
+}
+
+.editor-preview {
+	background: white !important;
 }

@@ -65,14 +65,27 @@ class MarkdownEditor extends React.Component {
 
     togglePreview = () => {
         const mde = this.mdeRef.current.simpleMde;
-        mde.togglePreview()
+        mde.togglePreview();
+        // this.toggleToolbar();
+    }
+
+    toggleToolbar = () => {
+        console.log("TOOLBAR TOGGLED")
+        // also toggle the toolbar
+        var tool = ReactDOM.findDOMNode(this).getElementsByClassName("editor-toolbar")
+        if (tool.length > 0) {
+            if (this.state.showPreview) {
+                tool[0].style.display = "block"
+            } else {
+                tool[0].style.display = "none"
+            }
+        }
     }
 
 
     handleClickOutside = event => {
         const domNode = ReactDOM.findDOMNode(this);
         if (!domNode || !domNode.contains(event.target)) {
-            console.log("HANDLE OUTSIDE")
             if (!this.state.showPreview) {
                 this.togglePreview();
             }
@@ -80,7 +93,6 @@ class MarkdownEditor extends React.Component {
                 showPreview: true
             });
         } else if (domNode.contains(event.target)) {
-            console.log("CLICKED INSIDE")
             if (this.state.showPreview) {
                 this.togglePreview();
             }
@@ -93,6 +105,8 @@ class MarkdownEditor extends React.Component {
 
     corn = () => {
         console.log("ANGERY")
+        const mde = this.mdeRef.current.simpleMde;
+        console.log(mde)
     }
 
 
@@ -101,9 +115,7 @@ class MarkdownEditor extends React.Component {
 			previewContainer: this.state.showPreview
 		});
 		return (
-            <div 
-                className={outerClass}
-            >
+            <div className={outerClass}>
                 {/* <button onClick={this.corn}>I HATE CORN</button> */}
                 <SimpleMDE
                     className="editor"
@@ -112,11 +124,10 @@ class MarkdownEditor extends React.Component {
                     value={this.state.mdeValue}
                     ref={this.mdeRef}
                     options={{
-                        // toolbar: false,
                         spellChecker: false,
                         indentWithTabs: true,
                         forceSync: true,
-                        // shortcuts: disabledShortcuts
+                        hideIcons: "preview"
                     }}
                 />
             </div>
