@@ -30,7 +30,7 @@ const disabledShortcuts = {
 }
 
 // some ugly placeholder text
-const placeholderContent = "# Hi stranger \nWelcome to Cadence! Cadence supports Markdown, meaning you can take notes and change pages quickly - at a productive cadence. \n\n## Todo list \n\n* install Chrome \n* install Cadence \n* take notes \n\n ## Steps to world domination\n\n1. Make up a plan \n2. Follow the plan\n\n> NOTE: Make sure to angery react all pictures of corn"
+const placeholderContent = "# Hi stranger \nWelcome to Cadence! Cadence supports Markdown, meaning you can take notes and change pages quickly - at a productive cadence. \n\n## Todo list \n\n* install Chrome \n* install Cadence \n* take notes \n\n## Steps to world domination\n\n1. Make up a plan \n2. Follow the plan\n\nNOTE: Make sure to angery react all pictures of corn\n\n```\n# you can also write code\na = 3\nb = 3\nc = a + b # evaluates to 6\n```"
 
 class MarkdownEditor extends React.Component {
 
