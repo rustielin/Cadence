@@ -79,7 +79,7 @@ class MarkdownEditor extends React.Component {
         if (this.state.showPreview) {
             mde.codemirror.focus()
         }
-        this.toggleToolbar(); // XXX: ideally, toolbar showing iff preview showing
+        // this.toggleToolbar(); // XXX: ideally, toolbar showing iff preview showing
     }
 
     toggleToolbar = () => {
