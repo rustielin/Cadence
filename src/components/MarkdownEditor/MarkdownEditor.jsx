@@ -1,5 +1,7 @@
 import React from "react";
+import ReactDOM from "react-dom";
 import SimpleMDE from "react-simplemde-editor";
+import classNames from "classnames";
 import "./MarkdownEditor.css";
 import "easymde/dist/easymde.min.css";
 
@@ -37,9 +39,22 @@ class MarkdownEditor extends React.Component {
         const content = localStorage.getItem("content");
         this.state = {
             mdeValue: content || placeholderContent,
+            showPreview: true
         }
         this.mdeRef = React.createRef();
     }
+
+
+    componentDidMount() {
+        this.togglePreview();
+        document.addEventListener('click', this.handleClickOutside, true);
+    }
+    
+
+    componentWillUnmount() {
+        document.removeEventListener('click', this.handleClickOutside, true);
+    }
+
     
     handleChange = value => {
         this.setState({ mdeValue: value });
@@ -47,13 +62,48 @@ class MarkdownEditor extends React.Component {
 		localStorage.setItem("content", content);
     };
 
+
+    togglePreview = () => {
+        const mde = this.mdeRef.current.simpleMde;
+        mde.togglePreview()
+    }
+
+
+    handleClickOutside = event => {
+        const domNode = ReactDOM.findDOMNode(this);
+        if (!domNode || !domNode.contains(event.target)) {
+            console.log("HANDLE OUTSIDE")
+            if (!this.state.showPreview) {
+                this.togglePreview();
+            }
+            this.setState({
+                showPreview: true
+            });
+        } else if (domNode.contains(event.target)) {
+            console.log("CLICKED INSIDE")
+            if (this.state.showPreview) {
+                this.togglePreview();
+            }
+            this.setState({
+                showPreview: false
+            });
+        }
+    }
+
+
     corn = () => {
         console.log("ANGERY")
     }
 
+
 	render = () => {
+        var outerClass = classNames("editorContainer", {
+			previewContainer: this.state.showPreview
+		});
 		return (
-            <div className="editorContainer">
+            <div 
+                className={outerClass}
+            >
                 {/* <button onClick={this.corn}>I HATE CORN</button> */}
                 <SimpleMDE
                     className="editor"
@@ -62,11 +112,11 @@ class MarkdownEditor extends React.Component {
                     value={this.state.mdeValue}
                     ref={this.mdeRef}
                     options={{
-                        toolbar: false,
+                        // toolbar: false,
                         spellChecker: false,
                         indentWithTabs: true,
                         forceSync: true,
-                        shortcuts: disabledShortcuts
+                        // shortcuts: disabledShortcuts
                     }}
                 />
             </div>

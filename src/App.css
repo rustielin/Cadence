@@ -2,25 +2,12 @@
 /*    BASE    */
 /* ---------- */
 
-body {
-	margin: 0;
-	font-family: "Open Sans", sans-serif;
-}
-
 body * {
 	box-sizing: border-box;
 	outline: none;
 }
 
-ul {
-	padding-left: 0;
-}
-
 .container {
 	width: 100vw;
 	height: 100vh;
-}
-
-div {
-	font-size: 1.2rem;
 }
