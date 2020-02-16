@@ -97,6 +97,12 @@
 	cursor: pointer;
 }
 
+.refreshBtn:hover,
+.lockBtn:hover,
+.settingsBtn:hover {
+	fill: gray;
+}
+
 .lockedBtn {
 	opacity: 1;
 	fill: gray;
