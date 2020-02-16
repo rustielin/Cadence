@@ -24,6 +24,7 @@
 	flex-direction: column;
 	justify-content: center;
 	outline: none;
+	font-size: 1.1rem;
 }
 
 /* Overrides  */
