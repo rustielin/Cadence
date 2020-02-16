@@ -1,6 +1,6 @@
 # Cadence
 
-![cadence](cadence.png)
+![cadence-logo](cadence512.png)
 
 Minimal Chrome new tab markdown editor. Images from Unsplash. Inspired by [Moment](https://github.com/siebevd/Moment), by Siebe Van Dijck. 
 
@@ -8,6 +8,11 @@ Features:
 * Uses a new React markdown editor (simplemde)
 * New reactive UI features
 * Query strings for Unsplash in settings
+
+## Preview
+
+![cadence](cadence.png)
+
 
 ## Development
 
