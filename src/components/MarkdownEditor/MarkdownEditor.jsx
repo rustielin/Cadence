@@ -4,6 +4,7 @@ import SimpleMDE from "react-simplemde-editor";
 import classNames from "classnames";
 import "./MarkdownEditor.css";
 import "easymde/dist/easymde.min.css";
+import $ from "jquery";
 
 // XXX: hack to disable shortcuts in simplemde
 const disabledShortcuts = {
@@ -46,10 +47,19 @@ class MarkdownEditor extends React.Component {
 
 
     componentDidMount() {
-        this.togglePreview();
+        this.togglePreview(); // start it in preview mode
         document.addEventListener('click', this.handleClickOutside, true);
     }
-    
+
+    componentDidUpdate() {
+        $('.cm-link').each((i, el) => {
+            var line = el.innerHTML;
+            if (!line.includes("href")) {
+                el.innerHTML = `<a href="${line}">${line}</a>`
+            }
+            console.log(el.innerHTML)
+        })
+    }
 
     componentWillUnmount() {
         document.removeEventListener('click', this.handleClickOutside, true);
@@ -66,18 +76,19 @@ class MarkdownEditor extends React.Component {
     togglePreview = () => {
         const mde = this.mdeRef.current.simpleMde;
         mde.togglePreview();
-        // this.toggleToolbar();
+        if (this.state.showPreview) {
+            mde.codemirror.focus()
+        }
+        this.toggleToolbar(); // XXX: ideally, toolbar showing iff preview showing
     }
 
     toggleToolbar = () => {
-        console.log("TOOLBAR TOGGLED")
-        // also toggle the toolbar
-        var tool = ReactDOM.findDOMNode(this).getElementsByClassName("editor-toolbar")
+        var tool = ReactDOM.findDOMNode(this).querySelectorAll("#editor-wrapper > div.editor-toolbar");
         if (tool.length > 0) {
             if (this.state.showPreview) {
-                tool[0].style.display = "block"
+                tool[0].style.visibility = "visible"
             } else {
-                tool[0].style.display = "none"
+                tool[0].style.visibility = "hidden"
             }
         }
     }
@@ -105,8 +116,39 @@ class MarkdownEditor extends React.Component {
 
     corn = () => {
         console.log("ANGERY")
+
+    }
+
+
+    validURL = (str) => {
+        var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+        '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+        '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+        return !!pattern.test(str);
+    }
+
+    /**
+     * Get the text we've shown on screen and just show it again
+     * Lmao this is like code injecting ourselves
+     */
+    renderer = text => {
         const mde = this.mdeRef.current.simpleMde;
-        console.log(mde)
+        const doc = mde.codemirror.doc;
+        var rendered = ReactDOM.findDOMNode(this).getElementsByClassName("CodeMirror-code")[0];
+        console.log("RENDERED", rendered.children[0].children[0])
+        var numLines = mde.codemirror.doc.children[0].lines.length;
+        for (var i = 0; i < numLines; i++) {
+            var line = doc.getLine(i);
+            if (this.validURL(line)) {
+                console.log("URL FOUND AT", line);
+                rendered.children[i].innerHTML = `<a href="${line}">${line}</a>`
+            }
+        }
+        
+        return rendered.innerHTML
     }
 
 
@@ -127,7 +169,8 @@ class MarkdownEditor extends React.Component {
                         spellChecker: false,
                         indentWithTabs: true,
                         forceSync: true,
-                        hideIcons: "preview"
+                        hideIcons: "preview",
+                        // previewRender: this.renderer
                     }}
                 />
             </div>

@@ -36,3 +36,7 @@
 .editor-preview {
 	background: white !important;
 }
+
+.editor-toolbar {
+	visibility: hidden !important;
+}
