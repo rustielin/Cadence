@@ -40,3 +40,21 @@
 /* .editor-toolbar {
 	visibility: hidden !important;
 } */
+
+.parsed {
+	cursor: yes;
+}
+
+.cm-link {
+	cursor: pointer;
+}
+
+.cm-link:hover {
+	opacity: 0.5;
+}
+
+/* BROKEN FOR NOW */
+/* span.cm-formatting.cm-formatting-strong.cm-strong,
+span.cm-formatting.cm-formatting-em.cm-em {
+	display: none;
+} */
