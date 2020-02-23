@@ -1,164 +1,171 @@
-const QUERY_ITEM_NAME = "unsplashQueryText";
+/**
+ * Potentially dangerous 
+ */
 
-// Saves options to chrome.storage
-export const saveOptions = (ref) => {
-    console.log("Saving options...");
-    var queryText = ref.value;
-    localStorage.setItem(QUERY_ITEM_NAME, queryText);
-    localStorage.setItem("photos", "[]"); // clear the cache
-}
-  
-// Restores select box and checkbox state using the preferences
-// stored in chrome.storage.
-export const restoreOptions = (ref) => {
-    console.log("Restoring options...");
-    var queryText = localStorage.getItem(QUERY_ITEM_NAME);
-    if (!queryText) {
-        queryText = "";
-    }
-    ref.value = queryText;
-    console.log("Restored to", ref.value);
+var ref;
+
+export const overrideInst = (inst) => {
+    ref = inst;
 }
 
-export const getToolbar = (ref) => {
-    console.log("GET TOOLBAR")
+// XXX: a bit ugly, but avoids putting this in the same file as MD editor
+export const getToolbar = (setState) => {
+    return makeToolbar(setState)
+}
+
+var makeToolbar = (setState) => {
     return [
         {
             name: "bold",
-            action: ref.toggleBold,
+            action: () => ref ? ref.toggleBold() : "",
             className: "fa fa-bold",
             title: "Bold",
             default: true
         },
         {
             name: "italic",
-            action: ref.toggleItalic,
+            action: () => ref ? ref.toggleItalic() : "",
             className: "fa fa-italic",
             title: "Italic",
             default: true
         },
         {
             name: "strikethrough",
-            action: ref.toggleStrikethrough,
+            action: () => ref ? ref.toggleStrikethrough() : "",
             className: "fa fa-strikethrough",
             title: "Strikethrough"
         },
         {
             name: "heading",
-            action: ref.toggleHeadingSmaller,
+            action: () => ref ? ref.toggleHeadingSmaller() : "",
             className: "fa fa-header",
             title: "Heading",
             default: true
         },
         {
             name: "heading-smaller",
-            action: ref.toggleHeadingSmaller,
+            action: () => ref ? ref.toggleHeadingSmaller() : "",
             className: "fa fa-header fa-header-x fa-header-smaller",
             title: "Smaller Heading"
         },
         {
             name: "heading-bigger",
-            action: ref.toggleHeadingBigger,
+            action: () => ref ? ref.toggleHeadingBigger() : "",
             className: "fa fa-header fa-header-x fa-header-bigger",
             title: "Bigger Heading"
         },
         {
             name: "heading-1",
-            action: ref.toggleHeading1,
+            action: () => ref ? ref.toggleHeading1() : "",
             className: "fa fa-header fa-header-x fa-header-1",
             title: "Big Heading"
         },
         {
             name: "heading-2",
-            action: ref.toggleHeading2,
+            action: () => ref ? ref.toggleHeading2() : "",
             className: "fa fa-header fa-header-x fa-header-2",
             title: "Medium Heading"
         },
         {
             name: "heading-3",
-            action: ref.toggleHeading3,
+            action: () => ref ? ref.toggleHeading3() : "",
             className: "fa fa-header fa-header-x fa-header-3",
             title: "Small Heading"
         },
         "|",
         {
             name: "code",
-            action: ref.toggleCodeBlock,
+            action: () => ref ? ref.toggleCodeBlock() : "",
             className: "fa fa-code",
             title: "Code"
         },
         {
             name: "quote",
-            action: ref.toggleBlockquote,
+            action: () => ref ? ref.toggleBlockquote() : "",
             className: "fa fa-quote-left",
             title: "Quote",
             default: true
         },
         {
             name: "unordered-list",
-            action: ref.toggleUnorderedList,
+            action: () => ref ? ref.toggleUnorderedList() : "",
             className: "fa fa-list-ul",
             title: "Generic List",
             default: true
         },
         {
             name: "ordered-list",
-            action: ref.toggleOrderedList,
+            action: () => ref ? ref.toggleOrderedList() : "",
             className: "fa fa-list-ol",
             title: "Numbered List",
             default: true
         },
         {
             name: "clean-block",
-            action: ref.cleanBlock,
+            action: () => ref ? ref.cleanBlock() : "",
             className: "fa fa-eraser fa-clean-block",
             title: "Clean block"
         },
         "|",
         {
             name: "link",
-            action: ref.drawLink,
+            action: () => ref ? ref.drawLink() : "",
             className: "fa fa-link",
             title: "Create Link",
             default: true
         },
         {
             name: "image",
-            action: ref.drawImage,
+            action: () => ref ? ref.drawImage() : "",
             className: "fa fa-picture-o",
             title: "Insert Image",
             default: true
         },
         {
             name: "table",
-            action: ref.drawTable,
+            action: () => ref ? ref.drawTable() : "",
             className: "fa fa-table",
             title: "Insert Table"
         },
         {
             name: "horizontal-rule",
-            action: ref.drawHorizontalRule,
+            action: () => ref ? ref.drawHorizontalRule() : "",
             className: "fa fa-minus",
             title: "Insert Horizontal Line"
         },
         "|",
         {
             name: "preview",
-            action: ref.togglePreview,
+            action: () => {
+                if (ref) {
+                    ref.togglePreview(); 
+                    setState({ previewEnabled: ref.isPreviewActive() }) ;
+                }
+            },
             className: "fa fa-eye no-disable",
             title: "Toggle Preview",
             default: true
         },
         {
             name: "side-by-side",
-            action: ref.toggleSideBySide,
+            action: () => {
+                if (ref) {
+                    ref.toggleSideBySide();
+                    setState({ sideBySideEnabled: ref.isSideBySideActive() })
+                }
+            },
             className: "fa fa-columns no-disable no-mobile",
             title: "Toggle Side by Side",
             default: true
         },
         {
             name: "fullscreen",
-            action: () => {ref.toggleFullScreen()},
+            action: () => {
+                if (ref) {
+                  ref.toggleFullScreen();
+                  setState({ fullMarkdownEditor: ref.isFullscreenActive() })
+                }
+            },
             className: "fa fa-arrows-alt no-disable no-mobile",
             title: "Toggle Fullscreen",
             default: true
@@ -166,7 +173,7 @@ export const getToolbar = (ref) => {
         "|",
         {
             name: "guide",
-            action: "https://ref.com/markdown-guide",
+            action: "https://simplemde.com/markdown-guide",
             className: "fa fa-question-circle",
             title: "Markdown Guide",
             default: true
@@ -174,13 +181,13 @@ export const getToolbar = (ref) => {
         "|",
         {
             name: "undo",
-            action: ref.undo,
+            action: () => ref ? ref.undo() : "",
             className: "fa fa-undo no-disable",
             title: "Undo"
         },
         {
             name: "redo",
-            action: ref.redo,
+            action: () => ref ? ref.redo() : "",
             className: "fa fa-repeat no-disable",
             title: "Redo"
         }

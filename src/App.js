@@ -11,7 +11,7 @@ class App extends React.Component {
     super();
     this.state = {
       fullBackground: !!localStorage.getItem("fullBackground"),
-      lockedImage: JSON.parse(localStorage.getItem("lockedImage")) || null
+	  lockedImage: JSON.parse(localStorage.getItem("lockedImage")) || null
     }
   }
 

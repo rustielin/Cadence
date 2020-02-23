@@ -5,6 +5,8 @@ import classNames from "classnames";
 import "./MarkdownEditor.css";
 import "easymde/dist/easymde.min.css";
 import { parser } from "../../utils/parser.js"
+// import { getToolbar } from "../../utils/settings"
+import { overrideInst, getToolbar } from "../../utils/toolbarOverrider"
 import $ from "jquery"
 
 // XXX: hack to disable shortcuts in simplemde
@@ -41,8 +43,15 @@ class MarkdownEditor extends React.Component {
         const content = localStorage.getItem("content");
         this.state = {
             mdeValue: content || placeholderContent,
+            loadedSettings: false,
+            toolbarEnabled: !!localStorage.getItem("toolbarEnabled"),
+            previewEnabled: !!localStorage.getItem("previewEnabled"),
+            fullMarkdownEditor: !!localStorage.getItem("fullMarkdownEditor"),
+            sideBySideEnabled: !!localStorage.getItem("sideBySideEnabled")
         }
+
         this.mdeRef = React.createRef();
+        this.inst = null;
     }
 
 
@@ -51,6 +60,11 @@ class MarkdownEditor extends React.Component {
     }
 
     componentDidUpdate() {
+        console.log("UPDATING STORAGE")
+        localStorage.setItem("previewEnabled", this.state.previewEnabled)
+        localStorage.setItem("sideBySideEnabled", this.state.sideBySideEnabled)
+        localStorage.setItem("fullMarkdownEditor", this.state.fullMarkdownEditor)
+        localStorage.setItem("toolbarEnabled", this.state.toolbarEnabled)
     }
 
     componentWillUnmount() {
@@ -72,30 +86,49 @@ class MarkdownEditor extends React.Component {
         }
     }
 
+    handleInst = inst => {
+        this.inst = inst;
+        if (this.state.previewEnabled) {
+            inst.togglePreview();
+        }
+        if (this.state.fullMarkdownEditor) {
+            inst.toggleFullScreen();
+        }
+        if (this.state.sideBySideEnabled) {
+            inst.toggleSideBySide();
+        }
+        overrideInst(inst); // for generating the toolbar
+        console.log(inst);
+    }
+
 
     corn = () => {
         console.log("ANGERY")
+        console.log(this.mdeRef.current.simpleMde)
+        this.setState({ loadedSettings: true })
     }
 
 
 	render = () => {
         var outerClass = classNames("editorContainer", {
 			previewContainer: this.state.showPreview
-		});
+        });
+        console.log("RENDERED")
 		return (
             <div className={outerClass}>
-                {/* <button onClick={this.corn}>I HATE CORN</button> */}
+                <button onClick={this.corn}>I HATE CORN</button>
                 <SimpleMDE
                     className="editor"
                     id="editor"
                     onChange={this.handleChange}
                     value={this.state.mdeValue}
                     ref={this.mdeRef}
+                    getMdeInstance={this.handleInst}
                     options={{
                         spellChecker: false,
                         indentWithTabs: true,
                         forceSync: true,
-                        toolbar: false,
+                        toolbar: getToolbar(this.setState.bind(this))
                     }}
                 />
             </div>
