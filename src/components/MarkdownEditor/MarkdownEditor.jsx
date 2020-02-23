@@ -57,11 +57,55 @@ class MarkdownEditor extends React.Component {
         document.removeEventListener('click', this.handleClickLink, true);
     }
 
+    getCount = (str, search) => {
+        return str.split(search).length - 1;
+    };
     
+    replaceText = (search, replaceWith, area) => {
+        if (area.value.indexOf(search) >= 0) {
+            var start = area.selectionStart;
+            var end = area.selectionEnd;
+            var textBefore = area.value.substr(0, end);
+            var lengthDiff = (replaceWith.length - search.length) * this.getCount(textBefore, search);
+            area.value = area.value.replace(search, replaceWith);
+            area.selectionStart = start + lengthDiff;
+            area.selectionEnd = end + lengthDiff;
+        }
+    };
+
     handleChange = value => {
-        this.setState({ mdeValue: value });
-        const content = value;
-		localStorage.setItem("content", content);
+        var val = value
+        var area = this.mdeRef.current.simpleMde.element;
+        $('[class=cm-strong]').each((i, el) => {
+            var txt = el.innerHTML;
+            console.log("ORIGINAL", txt)
+            if (txt.includes("**")) {
+                // console.log(selectionStart)
+                area.addEventListener("keypress", e => {
+                    var search = txt;
+                    var replaceWith = txt.replace("**", "")
+                    var start = area.selectionStart;
+                    var end = area.selectionEnd;
+                    console.log("(", start, ",", end, ")")
+                    var textBefore = val.substr(0, end);
+                    var lengthDiff = (replaceWith.length - search.length) * this.getCount(textBefore, search);
+                    console.log("DIFF", lengthDiff)
+                    // console.log("REPLACING", txt, "WITH", txt.replace("**", ""), "IN", val)
+                    val = val.replace(txt, txt.replace("**", ""))
+                    // this.replaceText(txt, txt.replace("**", ""), area )
+                    console.log("(", start + lengthDiff, ",", end + lengthDiff, ")")
+                    area.selectionStart = start + lengthDiff;
+                    area.selectionEnd = end + lengthDiff;
+                })
+
+                // console.log("CLEANED", val)
+                // el.innerHTML = txt.replace("**", "")
+                
+            }
+        });
+        this.setState({ mdeValue: val });
+        localStorage.setItem("content", val);
+        
     };
 
 
@@ -75,6 +119,7 @@ class MarkdownEditor extends React.Component {
 
     corn = () => {
         console.log("ANGERY")
+        console.log(this.mdeRef.current)
     }
 
 
@@ -95,7 +140,8 @@ class MarkdownEditor extends React.Component {
                         spellChecker: false,
                         indentWithTabs: true,
                         forceSync: true,
-                        toolbar: false,
+                        
+                        // toolbar: false,
                     }}
                 />
             </div>
