@@ -42,36 +42,6 @@ var makeToolbar = (setState) => {
             title: "Heading",
             default: true
         },
-        {
-            name: "heading-smaller",
-            action: () => ref ? ref.toggleHeadingSmaller() : "",
-            className: "fa fa-header fa-header-x fa-header-smaller",
-            title: "Smaller Heading"
-        },
-        {
-            name: "heading-bigger",
-            action: () => ref ? ref.toggleHeadingBigger() : "",
-            className: "fa fa-header fa-header-x fa-header-bigger",
-            title: "Bigger Heading"
-        },
-        {
-            name: "heading-1",
-            action: () => ref ? ref.toggleHeading1() : "",
-            className: "fa fa-header fa-header-x fa-header-1",
-            title: "Big Heading"
-        },
-        {
-            name: "heading-2",
-            action: () => ref ? ref.toggleHeading2() : "",
-            className: "fa fa-header fa-header-x fa-header-2",
-            title: "Medium Heading"
-        },
-        {
-            name: "heading-3",
-            action: () => ref ? ref.toggleHeading3() : "",
-            className: "fa fa-header fa-header-x fa-header-3",
-            title: "Small Heading"
-        },
         "|",
         {
             name: "code",
@@ -99,12 +69,6 @@ var makeToolbar = (setState) => {
             className: "fa fa-list-ol",
             title: "Numbered List",
             default: true
-        },
-        {
-            name: "clean-block",
-            action: () => ref ? ref.cleanBlock() : "",
-            className: "fa fa-eraser fa-clean-block",
-            title: "Clean block"
         },
         "|",
         {
@@ -138,8 +102,10 @@ var makeToolbar = (setState) => {
             name: "preview",
             action: () => {
                 if (ref) {
+                    // sidebyside disables anyways
+                    setState({ previewEnabled: !ref.isPreviewActive(), sideBySideEnabled: false })
                     ref.togglePreview(); 
-                    setState({ previewEnabled: ref.isPreviewActive() }) ;
+                    console.log("Setting preview to", ref.isPreviewActive());
                 }
             },
             className: "fa fa-eye no-disable",
@@ -150,8 +116,10 @@ var makeToolbar = (setState) => {
             name: "side-by-side",
             action: () => {
                 if (ref) {
+                    // fullscreen changes anyways, but depends on whether sidebyside is working
+                    setState({ sideBySideEnabled: !ref.isSideBySideActive(), fullMarkdownEditor: !ref.isSideBySideActive(), previewEnabled: false })
                     ref.toggleSideBySide();
-                    setState({ sideBySideEnabled: ref.isSideBySideActive() })
+                    console.log("SET SIDE BY SIDE", ref.isSideBySideActive())
                 }
             },
             className: "fa fa-columns no-disable no-mobile",
@@ -162,8 +130,10 @@ var makeToolbar = (setState) => {
             name: "fullscreen",
             action: () => {
                 if (ref) {
-                  ref.toggleFullScreen();
-                  setState({ fullMarkdownEditor: ref.isFullscreenActive() })
+                    // sidebyside disables anyways
+                    setState({ fullMarkdownEditor: !ref.isFullscreenActive(), sideBySideEnabled: false })
+                    ref.toggleFullScreen();
+                    console.log("SET FULLSCREEN", ref.isFullscreenActive())
                 }
             },
             className: "fa fa-arrows-alt no-disable no-mobile",
@@ -178,18 +148,5 @@ var makeToolbar = (setState) => {
             title: "Markdown Guide",
             default: true
         },
-        "|",
-        {
-            name: "undo",
-            action: () => ref ? ref.undo() : "",
-            className: "fa fa-undo no-disable",
-            title: "Undo"
-        },
-        {
-            name: "redo",
-            action: () => ref ? ref.redo() : "",
-            className: "fa fa-repeat no-disable",
-            title: "Redo"
-        }
     ]
 }

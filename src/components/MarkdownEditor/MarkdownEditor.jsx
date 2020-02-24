@@ -50,6 +50,8 @@ class MarkdownEditor extends React.Component {
             sideBySideEnabled: !!localStorage.getItem("sideBySideEnabled")
         }
 
+        console.log("INIT STATE: ", this.state)
+
         this.mdeRef = React.createRef();
         this.inst = null;
     }
@@ -60,15 +62,30 @@ class MarkdownEditor extends React.Component {
     }
 
     componentDidUpdate() {
-        console.log("UPDATING STORAGE")
-        localStorage.setItem("previewEnabled", this.state.previewEnabled)
-        localStorage.setItem("sideBySideEnabled", this.state.sideBySideEnabled)
-        localStorage.setItem("fullMarkdownEditor", this.state.fullMarkdownEditor)
-        localStorage.setItem("toolbarEnabled", this.state.toolbarEnabled)
+        console.log("UPDATING STORAGE");
+        console.log("Saving state:", this.state);
+        this.saveSettings();
+
     }
 
     componentWillUnmount() {
         document.removeEventListener('click', this.handleClickLink, true);
+    }
+
+    setBool = (key, val) => {
+        if (val) {
+            localStorage.setItem(key, val)
+        } else {
+            localStorage.removeItem(key)
+        }
+    }
+
+    // can't save booleans sad...
+    saveSettings = () => {
+        this.setBool("previewEnabled", this.state.previewEnabled)
+        this.setBool("sideBySideEnabled", this.state.sideBySideEnabled)
+        this.setBool("fullMarkdownEditor", this.state.fullMarkdownEditor)
+        this.setBool("toolbarEnabled", this.state.toolbarEnabled)
     }
 
     
@@ -86,10 +103,14 @@ class MarkdownEditor extends React.Component {
         }
     }
 
+    // render the proper way the first time
     handleInst = inst => {
         this.inst = inst;
+        overrideInst(inst); // for generating the toolbar
+        console.log("HandleInst state:", this.state)
         if (this.state.previewEnabled) {
             inst.togglePreview();
+            console.log("TOGGLED")
         }
         if (this.state.fullMarkdownEditor) {
             inst.toggleFullScreen();
@@ -97,8 +118,9 @@ class MarkdownEditor extends React.Component {
         if (this.state.sideBySideEnabled) {
             inst.toggleSideBySide();
         }
-        overrideInst(inst); // for generating the toolbar
-        console.log(inst);
+        if (this.state.toolbarEnabled) {
+            console.log("TOOLBAR ENABLED")
+        }
     }
 
 
@@ -106,6 +128,7 @@ class MarkdownEditor extends React.Component {
         console.log("ANGERY")
         console.log(this.mdeRef.current.simpleMde)
         this.setState({ loadedSettings: true })
+        this.saveSettings();
     }
 
 
@@ -116,7 +139,7 @@ class MarkdownEditor extends React.Component {
         console.log("RENDERED")
 		return (
             <div className={outerClass}>
-                <button onClick={this.corn}>I HATE CORN</button>
+                {/* <button onClick={this.corn}>I HATE CORN</button> */}
                 <SimpleMDE
                     className="editor"
                     id="editor"
