@@ -53,8 +53,8 @@
 	opacity: 0.5;
 }
 
-/* BROKEN FOR NOW
+/* BROKEN FOR NOW */
 span.cm-formatting.cm-formatting-strong.cm-strong,
 span.cm-formatting.cm-formatting-em.cm-em {
 	display: none;
-} */
+}
