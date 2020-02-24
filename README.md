@@ -8,6 +8,7 @@ Features:
 * Uses a new React markdown editor (simplemde)
 * New reactive UI features
 * Query strings for Unsplash in settings
+* Persistant view of the markdown editor changes
 
 ## Development
 
