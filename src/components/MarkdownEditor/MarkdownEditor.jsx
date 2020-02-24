@@ -121,7 +121,10 @@ class MarkdownEditor extends React.Component {
             inst.toggleSideBySide();
         }
         if (!this.state.toolbarEnabled) { // it's on by default, so check if we need to turn it off
-            this.toggleToolbar();
+            // this.toggleToolbar();
+            document.styleSheets[0].removeRule(0)
+            document.styleSheets[0].insertRule(".editor-toolbar { display: none }", 0)
+            console.log("Toolbar DISABLED")
         }
     }
 
@@ -129,10 +132,11 @@ class MarkdownEditor extends React.Component {
         document.styleSheets[0].removeRule(0)
         if (this.state.toolbarEnabled) { 
             document.styleSheets[0].insertRule(".editor-toolbar { display: none }", 0)
+            console.log("Toolbar DISABLED")
         } else {
             document.styleSheets[0].insertRule(".editor-toolbar { display: block }", 0)
+            console.log("Toolbar ENABLED")
         }
-        this.setState({ toolbarEnabled: !this.state.toolbarEnabled }); 
     }
 
 
@@ -170,7 +174,10 @@ class MarkdownEditor extends React.Component {
                                 var button = document.createElement("button");
                                 button.innerHTML = "toggle toolbar";
                                 // button.appendChild(document.createTextNode("Toggle Toolbar"));
-                                button.onclick = this.toggleToolbar;
+                                button.onclick = () => {
+                                    this.toggleToolbar();
+                                    this.setState({ toolbarEnabled: !this.state.toolbarEnabled });
+                                };
                                 el.appendChild(button);
                             }
                         }, "lines", "words", "cursor"]
