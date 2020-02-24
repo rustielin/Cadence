@@ -54,6 +54,9 @@ class MarkdownEditor extends React.Component {
 
         this.mdeRef = React.createRef();
         this.inst = null;
+
+        // XXX: UGLY!!
+        document.styleSheets[0].insertRule(".editor-toolbar {  }", 0)
     }
 
 
@@ -110,7 +113,6 @@ class MarkdownEditor extends React.Component {
         console.log("HandleInst state:", this.state)
         if (this.state.previewEnabled) {
             inst.togglePreview();
-            console.log("TOGGLED")
         }
         if (this.state.fullMarkdownEditor) {
             inst.toggleFullScreen();
@@ -118,9 +120,19 @@ class MarkdownEditor extends React.Component {
         if (this.state.sideBySideEnabled) {
             inst.toggleSideBySide();
         }
-        if (this.state.toolbarEnabled) {
-            console.log("TOOLBAR ENABLED")
+        if (!this.state.toolbarEnabled) { // it's on by default, so check if we need to turn it off
+            this.toggleToolbar();
         }
+    }
+
+    toggleToolbar = () => {
+        document.styleSheets[0].removeRule(0)
+        if (this.state.toolbarEnabled) { 
+            document.styleSheets[0].insertRule(".editor-toolbar { display: none }", 0)
+        } else {
+            document.styleSheets[0].insertRule(".editor-toolbar { display: block }", 0)
+        }
+        this.setState({ toolbarEnabled: !this.state.toolbarEnabled }); 
     }
 
 
@@ -151,7 +163,17 @@ class MarkdownEditor extends React.Component {
                         spellChecker: false,
                         indentWithTabs: true,
                         forceSync: true,
-                        toolbar: getToolbar(this.setState.bind(this))
+                        toolbar: getToolbar(this.setState.bind(this)),
+                        status: [{
+                            className: "toggleToolbar",
+                            defaultValue: el => {
+                                var button = document.createElement("button");
+                                button.innerHTML = "toggle toolbar";
+                                // button.appendChild(document.createTextNode("Toggle Toolbar"));
+                                button.onclick = this.toggleToolbar;
+                                el.appendChild(button);
+                            }
+                        }, "lines", "words", "cursor"]
                     }}
                 />
             </div>
