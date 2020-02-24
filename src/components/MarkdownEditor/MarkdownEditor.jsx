@@ -173,6 +173,7 @@ class MarkdownEditor extends React.Component {
                             defaultValue: el => {
                                 var button = document.createElement("button");
                                 button.innerHTML = "toggle toolbar";
+                                button.className = "tool-button";
                                 // button.appendChild(document.createTextNode("Toggle Toolbar"));
                                 button.onclick = () => {
                                     this.toggleToolbar();

@@ -53,6 +53,20 @@
 	opacity: 0.5;
 }
 
+.tool-button {
+	padding: 0;
+	border: none;
+	background: none;
+	cursor: pointer;
+	font-size: 12px;
+	text-decoration: underline;
+	color: #959694;
+}
+
+.tool-button:hover {
+	opacity: 0.5;
+}
+
 /* BROKEN FOR NOW */
 /* span.cm-formatting.cm-formatting-strong.cm-strong,
 span.cm-formatting.cm-formatting-em.cm-em {
