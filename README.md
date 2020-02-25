@@ -17,9 +17,11 @@ Firstly, sign up for an Unsplash API key and put it in `src/config.js` as follow
 ```
 module.exports = {
 	unsplash: {
-		apiKey: 'API KEY HERE'
+		apiKeys: ['<keys here>']
 	}
 }
 ```
+
+You can also add multiple keys if you have them. Good for debugging and postponing the rate limiter. Ideally we'd have another service for that but yolo save dat $$$.
 
 Start by using `yarn`. You can set up dev mode by using `yarn start`. Production builds are made using `yarn build`. You can then load the extension into Chrome by loading unpacked extension in the `build` directory.
