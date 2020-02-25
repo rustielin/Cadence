@@ -1,5 +1,7 @@
 import CONFIG from "../config.js";
 
+const count = 100; // save dat $$$
+
 const queryPhotos = (query) => {
 	const keys = CONFIG.unsplash.apiKeys
 	const key = keys[Math.floor(Math.random()*keys.length)];
@@ -7,7 +9,7 @@ const queryPhotos = (query) => {
 		query = query.trim();
 		console.log("QUERY PHOTOS WITH", query)
 		return fetch(
-			`https://api.unsplash.com/search/photos?query=${query}&count=30&client_id=${
+			`https://api.unsplash.com/search/photos?query=${query}&count=${count}&client_id=${
 				key
 			}`
 		)
@@ -25,7 +27,7 @@ const queryPhotos = (query) => {
 	console.log("RANDOM")
 	
 	return fetch(
-		`https://api.unsplash.com/photos/random?count=30&client_id=${
+		`https://api.unsplash.com/photos/random?count=${count}&client_id=${
 			key
 		}`
 	)
