@@ -12,7 +12,7 @@ Features:
 
 ## Development
 
-Firstly, sign up for an Unsplash API key and put it in `src/config.js` as following: 
+Firstly, sign up for an Unsplash API key and put it in a file `src/config.js` as following: 
 
 ```
 module.exports = {
