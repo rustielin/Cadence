@@ -25,8 +25,10 @@ class App extends React.Component {
 			// TODO: should this be moved to the api part?
 			// tell unsplash that the image is "downloaded",
 			// which is needed to comply with the unsplash api
+			const keys = CONFIG.unsplash.apiKeys
+			const key = keys[Math.floor(Math.random()*keys.length)];
 			fetch(
-				`${data.links.download_location}?client_id=${CONFIG.unsplash.apiKey}`
+				`${data.links.download_location}?client_id=${key}`
 			)
 				.then(res => res.json())
 				.catch(e => console.log("ERR", e));
