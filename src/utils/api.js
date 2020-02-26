@@ -2,13 +2,8 @@ import CONFIG from "../config.js";
 
 const count = 100; // save dat $$$
 
-const queryPhotos = (query) => {
-	const keys = CONFIG.unsplash.apiKeys
-	const key = keys[Math.floor(Math.random()*keys.length)];
-	if (query && query !== "") {
-		query = query.trim();
-		console.log("QUERY PHOTOS WITH", query)
-		return fetch(
+const getPhoto = (query, key) => {
+	return fetch(
 			`https://api.unsplash.com/search/photos?query=${query}&count=${count}&client_id=${
 				key
 			}`
@@ -22,24 +17,20 @@ const queryPhotos = (query) => {
 				localStorage.setItem("photos", JSON.stringify(data));
 				return newPhoto;
 			});
+}
+
+const queryPhotos = (query) => {
+	const keys = CONFIG.unsplash.apiKeys
+	const key = keys[Math.floor(Math.random()*keys.length)];
+	if (query && query !== "") {
+		query = query.trim();
+		console.log("QUERY PHOTOS WITH", query)
+		return getPhoto(query, key)
 	}
 
-	console.log("RANDOM")
+	console.log("Defaulting to nature..!")
+	return getPhoto('nature', key)
 	
-	return fetch(
-		`https://api.unsplash.com/photos/random?count=${count}&client_id=${
-			key
-		}`
-	)
-		.then(res => res.json())
-		.then(data => {
-			console.log("DATA", data)
-			// Grab the latest photo
-			let newPhoto = data.pop();
-
-			localStorage.setItem("photos", JSON.stringify(data));
-			return newPhoto;
-		})
 }
 
 const getNextPhoto = () => {
